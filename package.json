@@ -1,0 +1,38 @@
+{
+  "name": "dom-patch",
+  "version": "0.0.1",
+  "description": "Patch dom nodes",
+  "main": "patch.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "testee test/test.html --browsers firefox --reporter Spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/canjs/dom-patch.git"
+  },
+  "keywords": [
+    "CanJS",
+    "diffing"
+  ],
+  "author": "Bitovi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/canjs/dom-patch/issues"
+  },
+  "homepage": "https://github.com/canjs/dom-patch#readme",
+  "system": {
+    "directories": {
+      "lib": "src"
+    }
+  },
+  "dependencies": {
+    "node-route": "^0.1.1"
+  },
+  "devDependencies": {
+    "steal": "^0.10.5",
+    "steal-qunit": "0.0.4"
+  }
+}
