@@ -7,6 +7,8 @@
     "test": "test"
   },
   "scripts": {
+    "build": "node build.js",
+    "prepublish": "node build.js",
     "test": "testee test/test.html --browsers firefox --reporter Spec"
   },
   "repository": {
@@ -35,6 +37,7 @@
   "devDependencies": {
     "can-simple-dom": "^0.2.11",
     "steal": "^0.10.5",
-    "steal-qunit": "0.0.4"
+    "steal-qunit": "0.0.4",
+    "steal-tools": "^0.10.7"
   }
 }

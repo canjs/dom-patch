@@ -56,10 +56,22 @@ function getNodeConstructor(document){
 	return nodeProto.constructor;
 }
 
+/**
+ * @function dom-patch/patch.unbind unbind
+ *
+ * Remove a callback from being bound to changes.
+ *
+ * @param {Function} callback
+ */
 function unbind(callback){
 	scheduler.unregister(callback);
 }
 
+/**
+ * @function dom-patch/patch.deregister deregister
+ *
+ * Remove all DOM wrappings and unbind all callbacks.
+ */
 function deregister() {
 	overrideTeardowns.forEach(function(fn){
 		fn();
