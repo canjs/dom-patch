@@ -5,7 +5,8 @@ var overrides = [
 	require("../overrides/insert"),
 	require("../overrides/remove"),
 	require("../overrides/attributes"),
-	require("../overrides/prop")
+	require("../overrides/prop"),
+	require("../overrides/events")
 ];
 
 exports = module.exports = bind;
