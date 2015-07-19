@@ -1,30 +1,32 @@
 var schedule = require("../scheduler").schedule;
-var domId = require("can-worker/dom-id/");
-var inDocument = require("./utils/in_document");
-var Node = require("can-simple-dom/simple-dom/document/node")["default"];
+var inDocument = require("./util/in_document");
 
-[
+var interestingProps = [
 	{ prop:"nodeValue", type: "text"},
 	{ prop: "value", type: "prop"},
 	{ prop: "className", type: "prop"}
-].forEach(watchProperty);
+];
 
-function watchProperty(info) {
-	var prop = info.prop;
-	var type = info.type;
-	var priv = "_" + prop;
+module.exports = function(Node){
+	interestingProps.forEach(watchProperty);
 
-	Object.defineProperty(Node.prototype, prop, {
-		get: function(){
-			return this[priv];
-		},
-		set: function(val){
-			this[priv] = val;
+	function watchProperty(info) {
+		var prop = info.prop;
+		var type = info.type;
+		var priv = "_" + prop;
 
-			scheduleIfInDocument(this, prop, val, type);
-		}
-	});
-}
+		Object.defineProperty(Node.prototype, prop, {
+			get: function(){
+				return this[priv];
+			},
+			set: function(val){
+				this[priv] = val;
+
+				scheduleIfInDocument(this, prop, val, type);
+			}
+		});
+	}
+};
 
 function scheduleIfInDocument(node, prop, val, type){
 	if(inDocument(node.parentNode)) {

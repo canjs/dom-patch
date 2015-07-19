@@ -1,23 +1,24 @@
 var schedule = require("../scheduler").schedule;
-var domId = require("can-worker/dom-id/");
-var Node = require("can-simple-dom/simple-dom/document/node")["default"];
-var markAsInDocument = require("./utils/mark_in_document");
-var inDocument = require("./utils/in_document");
+var nodeRoute = require("node-route");
+var markAsInDocument = require("./util/mark_in_document");
+var inDocument = require("./util/in_document");
 
-var proto = Node.prototype;
+module.exports = function(Node){
+	var proto = Node.prototype;
 
-var removeChild = proto.removeChild;
-proto.removeChild = function(child){
-	var parent = this;
+	var removeChild = proto.removeChild;
+	proto.removeChild = function(child){
+		var parent = this;
 
-	if(inDocument(parent)) {
+		if(inDocument(parent)) {
 
-		schedule(parent, {
-			type: "remove",
-			child: domId.getID(child)
-		});
+			schedule(parent, {
+				type: "remove",
+				child: nodeRoute.getID(child)
+			});
 
-	}
+		}
 
-	return removeChild.apply(this, arguments);
+		return removeChild.apply(this, arguments);
+	};
 };

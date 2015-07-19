@@ -1,13 +1,10 @@
-//var schedule = requirex("../scheduler").schedule;
-var nodeRotue = require("node-route");
+var schedule = require("../scheduler").schedule;
+var nodeRoute = require("node-route");
 var markAsInDocument = require("./util/mark_in_document");
 var inDocument = require("./util/in_document");
-
-//var serialize = requirex("../../node_serialization").serialize;
-
+var serialize = require("../node_serialization").serialize;
 
 module.exports = function(Node){
-
 	var proto = Node.prototype;
 
 	var appendChild = proto.appendChild;
@@ -19,7 +16,7 @@ module.exports = function(Node){
 
 	var insertBefore = proto.insertBefore;
 	proto.insertBefore = function(child, ref){
-		var refIndex = domId.indexOfParent(this, ref);
+		var refIndex = nodeRoute.indexOfParent(this, ref);
 		var res = insertBefore.apply(this, arguments);
 		registerForDiff(child, refIndex);
 		return res;
@@ -33,8 +30,8 @@ function registerForDiff(child, refIndex){
 		markAsInDocument(child);
 
 		if(child.nodeType === 1) {
-			domId.getID(child);
-			domId.purgeSiblings(child);
+			nodeRoute.getID(child);
+			nodeRoute.purgeSiblings(child);
 		}
 
 		schedule(parent, function(route){

@@ -1,15 +1,16 @@
 var QUnit = require("steal-qunit");
 var can = require("can");
 var simpleDOM = require("can-simple-dom");
+var Node = require("can-simple-dom/simple-dom/document/node")["default"];
 require("can/util/vdom/build_fragment/");
 require("can/view/stache/");
-var domId = require("can-worker/dom-id/");
-var markAsInDocument = require("./utils/mark_in_document");
+var nodeRoute = require("node-route");
+var markAsInDocument = require("./util/mark_in_document");
 
-require("./insert");
-require("./prop");
+require("./insert")(Node);
+require("./prop")(Node);
 
-QUnit.module("can-worker overrides", {
+QUnit.module("dom-patch overrides", {
 	setup: function(){
 		this.oldPostMessage = window.postMessage;
 		window.postMessage = function(){};
@@ -46,8 +47,8 @@ QUnit.test("Inserting a sibling will reset ids", function(){
 	ul.insertBefore(this.doc.createElement("li"), firstLi);
 
 	// It should be removed from the nodeCache
-	equal(domId.nodeCache["0.1.0.0.0.0"], undefined, "SPAN is no longer in the map");
-	equal(domId.nodeCache["0.1.0.0.0"], ul.firstChild, "The new LI is in the map");
+	equal(nodeRoute.nodeCache["0.1.0.0.0.0"], undefined, "SPAN is no longer in the map");
+	equal(nodeRoute.nodeCache["0.1.0.0.0"], ul.firstChild, "The new LI is in the map");
 });
 
 QUnit.test("Setting a TextNode will create an id", function(){
@@ -60,5 +61,5 @@ QUnit.test("Setting a TextNode will create an id", function(){
 	map.attr("name", "wilbur");
 
 	var textNode = frag.firstChild.firstChild;
-	equal(domId.nodeCache["0.1.0"], textNode, "it is the text node");
+	equal(nodeRoute.nodeCache["0.1.0"], textNode, "it is the text node");
 });

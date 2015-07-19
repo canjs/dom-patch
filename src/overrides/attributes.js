@@ -1,14 +1,16 @@
 var schedule = require("../scheduler").schedule;
-var Node = require("can-simple-dom/simple-dom/document/node")["default"];
-var inDocument = require("./utils/in_document");
+var inDocument = require("./util/in_document");
 
-var proto = Node.prototype;
+module.exports = function(Node, document){
+	var Element = getElementConstructor(document);
+	var proto = Element.prototype;
 
-var setAttribute = proto.setAttribute;
-proto.setAttribute = function(attr, value){
-	var res = setAttribute.apply(this, arguments);
-	scheduleIfInDocument(this, attr, value);
-	return res;
+	var setAttribute = proto.setAttribute;
+	proto.setAttribute = function(attr, value){
+		var res = setAttribute.apply(this, arguments);
+		scheduleIfInDocument(this, attr, value);
+		return res;
+	};
 };
 
 function scheduleIfInDocument(node, attributeName, attributeValue){
@@ -19,4 +21,11 @@ function scheduleIfInDocument(node, attributeName, attributeValue){
 			value: attributeValue
 		});
 	}
+}
+
+function getElementConstructor(document){
+	var div = document.createElement("div");
+	var elementProto = Object.getPrototypeOf(div);
+
+	return elementProto.constructor;
 }
