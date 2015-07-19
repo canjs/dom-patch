@@ -22,9 +22,9 @@ var handlers = {
 		el[patch.prop] = patch.value;
 	},
 
-	globalEvent: function(patch){
+	globalEvent: function(patch, document, patchOptions){
 		var fn = patch.action === "add" ? "addEventListener" : "removeEventListener";
-		window[fn](patch.name, globalEventHandler);
+		window[fn](patch.name, patchOptions.globalEventHandler);
 	},
 
 	insert: function(patch, document, patchOptions){
