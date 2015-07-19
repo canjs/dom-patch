@@ -1,8 +1,8 @@
 {
   "name": "dom-patch",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Patch dom nodes",
-  "main": "patch.js",
+  "main": "dist/cjs/patch.js",
   "directories": {
     "test": "test"
   },
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/canjs/dom-patch#readme",
   "system": {
+    "main": "patch.js",
     "directories": {
       "lib": "src"
     }
