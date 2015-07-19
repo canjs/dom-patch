@@ -1,34 +1,25 @@
 var QUnit = require("steal-qunit");
 var loader = require("@loader");
 
+var patch = require("dom-patch");
+var simpleDOM = require("can-simple-dom");
+
 QUnit.module("dom-patch/patch", {
 	setup: function(done){
-		var self = this;
+		this.document = new simpleDOM.Document();
 
-		var clone = steal.clone(loader.clone());
-		clone.startup({main:"dom-patch"});
-
-		return clone.import("dom-patch", "can-simple-dom").then(function(mods){
-			self.patch = mods[0];
-			var simpleDOM = mods[1];
-			self.document = new simpleDOM.Document();
-
-			self.document = new simpleDOM.Document();
-			self.testArea = self.document.createElement("div");
-			self.document.documentElement.appendChild(self.testArea);
-		});
+		this.testArea = this.document.createElement("div");
+		this.document.documentElement.appendChild(this.testArea);
 	},
 	teardown: function(){
 		this.testArea.innerHTML = "";
+		patch.deregister();
 	}
 });
 
 QUnit.test("basics works", function(){
-	var patch = this.patch;
 	var document = this.document;
 	patch(document, function onpatches(patches){
-		patch.unbind(onpatches);
-
 		QUnit.equal(patches.length, 2, "There are two patches");
 		QUnit.equal(patches[0].type, "insert", "The first patch is the insert");
 		QUnit.equal(patches[1].type, "attribute", "The second patch is for the setAttribute");
@@ -48,15 +39,11 @@ QUnit.test("basics works", function(){
 });
 
 QUnit.test("works with properties", function(){
-	var patch = this.patch;
 	var document = this.document;
 
 	patch(document, function onpatches(patches){
-		patch.unbind(onpatches);
-
 		QUnit.equal(patches.length, 2, "There are two patches");
 		QUnit.equal(patches[1].type, "prop", "The second patch is prop");
-
 
 		QUnit.start();
 	});

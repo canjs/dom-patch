@@ -7,20 +7,25 @@ require("can/view/stache/");
 var nodeRoute = require("node-route");
 var markAsInDocument = require("./util/mark_in_document");
 
-require("./insert")(Node);
-require("./prop")(Node);
+var patch = require("dom-patch");
 
 QUnit.module("dom-patch overrides", {
 	setup: function(){
+		this.patch = patch;
+
 		this.oldPostMessage = window.postMessage;
 		window.postMessage = function(){};
 		this.doc = can.document = new simpleDOM.Document();
+
+		this.patch(this.doc, function(){});
 
 		markAsInDocument(this.doc.documentElement);
 	},
 	teardown: function(){
 		window.postMessage = this.oldPostMessage;
 		can.document = window.document;
+
+		this.patch.deregister();
 	}
 });
 

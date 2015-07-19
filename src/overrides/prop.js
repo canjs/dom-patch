@@ -23,7 +23,8 @@ module.exports = function(Node){
 				this[priv] = val;
 
 				scheduleIfInDocument(this, prop, val, type);
-			}
+			},
+			configurable: true
 		});
 	}
 };

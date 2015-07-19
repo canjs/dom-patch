@@ -12,8 +12,13 @@ exports = module.exports = bind;
 
 exports.bind = bind;
 exports.unbind = unbind;
+exports.deregister = deregister;
 
+// Used to keep track of documents we are listening to.
 var listeningDocs = [];
+// Functions that when called will undo DOM wrapping.
+var overrideTeardowns = [];
+
 
 /**
  * @module dom-patch/patch patch
@@ -29,7 +34,10 @@ function bind(document, callback){
 
 	if(listeningDocs.indexOf(document) === -1) {
 		overrides.forEach(function(override){
-			override(Node, document);
+			var res = override(Node, document);
+			if(typeof res !== "undefined") {
+				overrideTeardowns.push(res);
+			}
 		});
 		markAsInDocument(document.documentElement);
 		listeningDocs.push(document);
@@ -49,4 +57,13 @@ function getNodeConstructor(document){
 
 function unbind(callback){
 	scheduler.unregister(callback);
+}
+
+function deregister() {
+	overrideTeardowns.forEach(function(fn){
+		fn();
+	});
+	overrideTeardowns = [];
+	listeningDocs = [];
+	scheduler.unregister();
 }

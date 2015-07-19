@@ -22,6 +22,11 @@ module.exports = function(Node){
 		return res;
 	};
 
+	return function(){
+		proto.appendChild = appendChild;
+		proto.insertBefore = insertBefore;
+	};
+
 };
 
 function registerForDiff(child, refIndex){

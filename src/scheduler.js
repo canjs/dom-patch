@@ -74,6 +74,11 @@ exports.register = function(callback){
 };
 
 exports.unregister = function(callback){
+	if(arguments.length === 0) {
+		callbacks = [];
+		return;
+	}
+
 	var idx = callbacks.indexOf(callback);
 	if(idx >= 0) {
 		callbacks.splice(idx, 1);

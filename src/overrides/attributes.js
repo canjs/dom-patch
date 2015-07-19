@@ -11,6 +11,10 @@ module.exports = function(Node, document){
 		scheduleIfInDocument(this, attr, value);
 		return res;
 	};
+
+	return function(){
+		proto.setAttribute = setAttribute;
+	};
 };
 
 function scheduleIfInDocument(node, attributeName, attributeValue){
