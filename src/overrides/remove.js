@@ -10,7 +10,8 @@ module.exports = function(Node){
 	proto.removeChild = function(child){
 		var parent = this;
 
-		if(inDocument(parent)) {
+		if(inDocument(parent) && inDocument(child)) {
+			markAsInDocument(child, false);
 
 			schedule(parent, {
 				type: "remove",

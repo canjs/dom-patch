@@ -36,7 +36,7 @@ QUnit.test("removes occur in the correct order", function(){
 	var patches = [
 		{"type":"insert","node":nodeS,"route":"0.1.0"},
 		{"type":"remove","child":"0.1.0.0","route":"0.1.0"},
-		{"type":"remove","child":"0.1.0.1","route":"0.1.0"}
+		{"type":"remove","child":"0.1.0.0","route":"0.1.0"}
 	];
 
 	apply(document, patches);

@@ -6,17 +6,11 @@ var changedRoutes = {},
 	flushScheduled,
 	callbacks = [];
 
-exports.schedule = function schedule(el, callbackOrData){
+exports.schedule = function schedule(el, data){
 	var route = nodeRoute.getID(el);
+	data.route = route;
 
-	if(!changedRoutes[route]) {
-		changes.push(route);
-	}
-
-	var routeCallbacks = changedRoutes[route] || (changedRoutes[route] = []);
-	routeCallbacks.push(callbackOrData);
-	//routeCallbacks[0] = callbackOrData;
-
+	changes.push(data);
 	exports.scheduleFlush();
 };
 
@@ -41,21 +35,8 @@ exports.flushChanges = function flushChanges(){
 		domChanges.push(fn());
 	});
 
-	changes.forEach(function(route){
-		var callbacks = changedRoutes[route];
-
-		callbacks.forEach(function(fn){
-			if(typeof fn === "function") {
-				res = fn(route);
-			} else {
-				res = fn;
-			}
-			// Callbacks could return undefined which means do nothing.
-			if(res) {
-				res.route = route;
-				domChanges.push(res);
-			}
-		});
+	changes.forEach(function(data){
+		domChanges.push(data);
 	});
 
 	changedRoutes = {};

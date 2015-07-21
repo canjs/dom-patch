@@ -1,19 +1,15 @@
 
 module.exports = markAsInDocument;
 
-function markAsInDocument(element){
+function markAsInDocument(element, value){
 	var cur = element;
+	value = value === false ? false : true;
 
 	while(cur) {
-		if(cur.nodeType === 1) {
-			cur.inDocument = true;
-			if(cur.parentNode && cur.parentNode.dontDiff){
-				cur.dontDiff = true;
-			}
-		}
+		cur.inDocument = value;
 		var child = cur.firstChild;
 		while(child) {
-			markAsInDocument(child);
+			markAsInDocument(child, value);
 
 			child = child.nextSibling;
 		}
