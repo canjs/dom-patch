@@ -55,6 +55,8 @@ var handlers = {
 function applyPatches(document, patches, patchOptions){
 	patchOptions = patchOptions || {};
 
+	patches.sort(sortPatch);
+
 	patches.forEach(function(patch){
 		var handler = handlers[patch.type];
 		if(handler) {
@@ -63,4 +65,21 @@ function applyPatches(document, patches, patchOptions){
 			console.error("Patch type", patch.type, "not supported");
 		}
 	});
+}
+
+function sortPatch(a, b){
+	// Sort by route first
+	if(a.route < b.route) {
+		return -1;
+	} else if(a.route === b.route) {
+		// If these are removes we want to sort in
+		// decending order so that all items are removed.
+		if(a.child < b.child) {
+			return 1;
+		} else {
+			return -1;
+		}
+	}
+
+	return 1;
 }
