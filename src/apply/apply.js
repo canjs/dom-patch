@@ -6,6 +6,15 @@ module.exports = applyPatches;
 
 var handlers = {
 
+	event: function(patch, document, patchOptions){
+		var node = nodeRoute.findNode(patch.route);
+		node[patch.action](patch.event, patchOptions.eventHandler);
+	},
+
+	history: function(patch){
+		history[patch.action].apply(history, patch.args);
+	},
+
 	text: function(patch){
 		var node = nodeRoute.findNode(patch.route);
 		node.nodeValue = patch.value;

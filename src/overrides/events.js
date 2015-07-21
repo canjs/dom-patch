@@ -1,4 +1,6 @@
+var schedule = require("../scheduler").schedule;
 var scheduleGlobal = require("../scheduler").scheduleGlobal;
+var inDocument = require("./util/in_document");
 
 module.exports = function(Node){
 	var window = this;
@@ -13,6 +15,14 @@ module.exports = function(Node){
 				el.__events = {};
 			}
 			el.__events[eventName] = true;
+
+			if(inDocument(el)) {
+				schedule(el, {
+					type: "event",
+					action: "addEventListener",
+					event: eventName
+				});
+			}
 		}
 		return addEventListener.apply(this, arguments);
 	};
@@ -24,18 +34,23 @@ module.exports = function(Node){
 			if(el.__events) {
 				delete el.__events[eventName];
 			}
+			if(inDocument(el)) {
+				schedule(el, {
+					type: "event",
+					action: "removeEventListener",
+					event: eventName
+				});
+			}
 		}
 		return removeEventListener.apply(this, arguments);
 	};
 
 	var windowAddEventListener = window.addEventListener;
 	window.addEventListener = function(evName){
-		scheduleGlobal(function(){
-			return {
-				type: "globalEvent",
-				action: "add",
-				name: evName
-			};
+		scheduleGlobal({
+			type: "globalEvent",
+			action: "add",
+			name: evName
 		});
 	};
 

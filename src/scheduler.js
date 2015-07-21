@@ -14,8 +14,8 @@ exports.schedule = function schedule(el, data){
 	exports.scheduleFlush();
 };
 
-exports.scheduleGlobal = function scheduleGlobal(callback){
-	globals.push(callback);
+exports.scheduleGlobal = function scheduleGlobal(data){
+	globals.push(data);
 	exports.scheduleFlush();
 };
 
@@ -31,8 +31,8 @@ exports.scheduleFlush = function scheduleFlush(){
 exports.flushChanges = function flushChanges(){
 	var domChanges = [], fn, res;
 
-	globals.forEach(function(fn){
-		domChanges.push(fn());
+	globals.forEach(function(data){
+		domChanges.push(data);
 	});
 
 	changes.forEach(function(data){
