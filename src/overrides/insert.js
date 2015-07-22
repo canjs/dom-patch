@@ -26,7 +26,7 @@ module.exports = function(Node){
 	var insertBefore = proto.insertBefore;
 	proto.insertBefore = function(child, ref){
 		var refIndex = nodeRoute.indexOfParent(this, ref);
-		var children = getChildren(child);
+		var children = getChildren(child, true);
 
 		var res = insertBefore.apply(this, arguments);
 
@@ -67,12 +67,16 @@ function nodeParent(child){
 	return child.nodeType === 11 ? (child.firstChild && child.firstChild.parentNode) : child.parentNode;
 }
 
-function getChildren(el){
+function getChildren(el, reverse){
 	var children = [];
 	if(el.nodeType === 11) {
 		var cur = el.firstChild;
 		while(cur) {
-			children.unshift(cur);
+			if(reverse) {
+				children.unshift(cur);
+			} else {
+				children.push(cur);
+			}
 			cur = cur.nextSibling;
 		}
 	} else {

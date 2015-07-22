@@ -1,4 +1,5 @@
 var NodeProp = require("./node_prop");
+var setAttribute = require("./setattribute");
 
 exports.serialize = nodeToObject;
 
@@ -67,7 +68,11 @@ function objectToNode(objNode, insideSvg, diffOptions) {
 		}
 		if (objNode[NodeProp.ATTRIBUTES]) {
 			for (i = 0; i < objNode[NodeProp.ATTRIBUTES].length; i++) {
-				node.setAttribute(objNode[NodeProp.ATTRIBUTES][i][0], objNode[NodeProp.ATTRIBUTES][i][1]);
+				setAttribute(
+					node,
+					objNode[NodeProp.ATTRIBUTES][i][0],
+					objNode[NodeProp.ATTRIBUTES][i][1]
+				);
 			}
 		}
 		if (objNode[NodeProp.CHILD_NODES]) {

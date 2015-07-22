@@ -1,6 +1,6 @@
-var elements = require("can/view/elements.js");
 var deserialize = require("../node_serialization").deserialize;
 var nodeRoute = require("node-route");
+var setAttribute = require("../setattribute");
 
 module.exports = applyPatches;
 
@@ -22,7 +22,7 @@ var handlers = {
 
 	attribute: function(patch){
 		var el = nodeRoute.findNode(patch.route);
-		elements.setAttr(el, patch.attr, patch.value);
+		setAttribute(el, patch.attr, patch.value);
 	},
 
 	prop: function(patch){

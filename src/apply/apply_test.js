@@ -45,3 +45,17 @@ QUnit.test("removes occur in the correct order", function(){
 	QUnit.equal(this.testArea.firstChild.nodeName, "SPAN", "the only node is a span");
 
 });
+
+QUnit.test("can patch weird attribute names", function(){
+	var nodeS = [];
+	nodeS[3] = "SPAN";
+	nodeS[4] = [["[restaurant]","tacos"]];
+
+	var patches = [
+		{"type":"insert","node":nodeS,"route":"0.1.0"}
+	];
+
+	apply(document, patches);
+
+	QUnit.equal(true, true, "it worked");
+});
