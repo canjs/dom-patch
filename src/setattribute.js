@@ -2,7 +2,7 @@
 module.exports = setAttribute;
 
 var invalidAttributes = {
-	"[": true, "#": true
+	"[": true, "#": true, "(": true
 };
 
 function setAttribute(element, name, value){
