@@ -36,6 +36,9 @@ function nodeToObject(node){
 		if (node.selected) {
 			objNode[NodeProp.SELECTED] = node.selected;
 		}
+		if(node.className) {
+			objNode[NodeProp.CLASS] = node.className;
+		}
 		if(node.__events) {
 			objNode[NodeProp.EVENTS] = [];
 			var events = Object.keys(node.__events);
@@ -88,6 +91,9 @@ function objectToNode(objNode, insideSvg, diffOptions) {
 		}
 		if (objNode[NodeProp.SELECTED]) {
 			node.selected = objNode[NodeProp.SELECTED];
+		}
+		if (objNode[NodeProp.CLASS]) {
+			node.className = objNode[NodeProp.CLASS];
 		}
 		if (objNode[NodeProp.EVENTS]) {
 			node.__events = {};

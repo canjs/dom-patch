@@ -3,6 +3,7 @@ var loader = require("@loader");
 
 var patch = require("dom-patch");
 var simpleDOM = require("can-simple-dom");
+var NodeProp = require("../node_prop");
 
 QUnit.module("dom-patch/patch", {
 	setup: function(done){
@@ -53,6 +54,25 @@ QUnit.test("works with properties", function(){
 	this.testArea.appendChild(span);
 
 	span.className = "foobar";
+
+	QUnit.stop();
+});
+
+QUnit.test("setting className is serialized as a node patch", function(patches){
+	var document = this.document;
+
+	patch(document, function(patches){
+		var node = patches[0].node;
+
+		QUnit.equal(node[NodeProp.CLASS], "active", "Correct className added");
+
+		QUnit.start();
+	});
+
+	var span = document.createElement("span");
+	span.className = "active";
+
+	this.testArea.appendChild(span);
 
 	QUnit.stop();
 });
