@@ -9,7 +9,7 @@
   "scripts": {
     "build": "node build.js",
     "prepublish": "node build.js",
-    "test": "testee test/test.html --browsers firefox --reporter Spec"
+    "test": "testee src/apply/test.html src/patch/test.html --browsers firefox --reporter Spec"
   },
   "repository": {
     "type": "git",
