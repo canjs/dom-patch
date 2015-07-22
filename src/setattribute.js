@@ -23,6 +23,6 @@ function setByCloning(element, name, value){
 	var el = dummyEl();
 	el.innerHTML = "<span " + name + "=\"" + value + "\"></span>";
 	var attr = el.firstChild.attributes[0];
-	var cloned = attr.cloneNode();
-	el.setAttributeNode(cloned);
+	el.firstChild.removeAttributeNode(attr);
+	el.setAttributeNode(attr);
 }
