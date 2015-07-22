@@ -72,7 +72,7 @@ function getChildren(el){
 	if(el.nodeType === 11) {
 		var cur = el.firstChild;
 		while(cur) {
-			children.push(cur);
+			children.unshift(cur);
 			cur = cur.nextSibling;
 		}
 	} else {
