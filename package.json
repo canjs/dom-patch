@@ -29,7 +29,10 @@
     "main": "patch.js",
     "directories": {
       "lib": "src"
-    }
+    },
+    "npmIgnore": [
+      "testee"
+    ]
   },
   "dependencies": {
     "can": "^2.3.0-pre.2",
@@ -39,6 +42,7 @@
     "can-simple-dom": "^0.2.11",
     "steal": "^0.10.5",
     "steal-qunit": "0.0.4",
-    "steal-tools": "^0.10.7"
+    "steal-tools": "^0.10.7",
+    "testee": "^0.2.0"
   }
 }
