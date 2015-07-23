@@ -2,6 +2,14 @@ var scheduleGlobal = require("../scheduler").scheduleGlobal;
 
 module.exports = function(){
 	var window = this;
+	if(!window.history) {
+		var noop = function(){};
+		window.history = {
+			pushState: noop,
+			replaceState: noop
+		};
+	}
+
 	var history = window.history;
 
 	var pushState = history.pushState;
