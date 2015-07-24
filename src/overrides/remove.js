@@ -13,6 +13,10 @@ module.exports = function(Node){
 		if(inDocument(parent) && inDocument(child)) {
 			markAsInDocument(child, false);
 
+			// Purge all siblings and then purge the route itself.
+			nodeRoute.purgeSiblings(child);
+			nodeRoute.purgeNode(child);
+
 			schedule(parent, {
 				type: "remove",
 				child: nodeRoute.getID(child)

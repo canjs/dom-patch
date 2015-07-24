@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "can": "^2.3.0-pre.2",
-    "node-route": "^0.1.1"
+    "node-route": "^1.0.0"
   },
   "devDependencies": {
     "can-simple-dom": "^0.2.11",

@@ -49,10 +49,9 @@ function registerForDiff(child, parent, refIndex){
 	if(inDocument(parent)) {
 		markAsInDocument(child);
 
-		if(child.nodeType === 1) {
-			nodeRoute.getID(child);
-			nodeRoute.purgeSiblings(child);
-		}
+		// Cache this module and remove all children from the cache.
+		nodeRoute.getID(child);
+		nodeRoute.purgeSiblings(child);
 
 		schedule(parent, {
 			type: "insert",
