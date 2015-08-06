@@ -57,5 +57,5 @@ QUnit.test("can patch weird attribute names", function(){
 
 	apply(document, patches);
 
-	QUnit.equal(true, true, "it worked");
+	QUnit.equal(this.testArea.firstChild.getAttribute("[restaurant]"), "tacos", "special character attribute was set");
 });
