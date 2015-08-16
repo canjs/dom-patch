@@ -7,7 +7,7 @@ module.exports = applyPatches;
 var handlers = {
 
 	event: function(patch, document, patchOptions){
-		var node = nodeRoute.findNode(patch.route);
+		var node = nodeRoute.getNode(patch.route);
 		node[patch.action](patch.event, patchOptions.eventHandler);
 	},
 
@@ -16,17 +16,17 @@ var handlers = {
 	},
 
 	text: function(patch){
-		var node = nodeRoute.findNode(patch.route);
+		var node = nodeRoute.getNode(patch.route);
 		node.nodeValue = patch.value;
 	},
 
 	attribute: function(patch){
-		var el = nodeRoute.findNode(patch.route);
+		var el = nodeRoute.getNode(patch.route);
 		setAttribute(el, patch.attr, patch.value);
 	},
 
 	prop: function(patch){
-		var el = nodeRoute.findNode(patch.route);
+		var el = nodeRoute.getNode(patch.route);
 		if(!el) { return; }
 		el[patch.prop] = patch.value;
 	},
@@ -38,10 +38,10 @@ var handlers = {
 
 	insert: function(patch, document, patchOptions){
 		var node = deserialize(patch.node, false, patchOptions);
-		var parent = nodeRoute.findNode(patch.route);
+		var parent = nodeRoute.getNode(patch.route);
 
 		if(patch.ref) {
-			var ref = nodeRoute.findNode("0."+patch.ref, parent);
+			var ref = nodeRoute.getNode("0."+patch.ref, parent);
 			parent.insertBefore(node, ref);
 		} else {
 			parent.appendChild(node);
@@ -49,8 +49,8 @@ var handlers = {
 	},
 
 	remove: function(patch){
-		var parent = nodeRoute.findNode(patch.route);
-		var node = nodeRoute.findNode(patch.child);
+		var parent = nodeRoute.getNode(patch.route);
+		var node = nodeRoute.getNode(patch.child);
 
 		if(!node) {
 			return;
