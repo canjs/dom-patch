@@ -1,9 +1,11 @@
 var apply = require("dom-patch/apply");
+var nodeRoute = require("node-route");
 var QUnit = require("steal-qunit");
 
 QUnit.module("dom-patch/apply", {
 	setup: function(){
 		this.testArea = document.getElementById("qunit-test-area");
+		nodeRoute.purgeCache();
 	},
 	teardown: function(){
 		this.testArea.innerHTML = "";
@@ -58,4 +60,25 @@ QUnit.test("can patch weird attribute names", function(){
 	apply(document, patches);
 
 	QUnit.equal(this.testArea.firstChild.getAttribute("[restaurant]"), "tacos", "special character attribute was set");
+});
+
+QUnit.test("inserts purge the sibling route table", function(){
+	var ul = document.createElement("ul");
+	var div = document.createElement("div");
+	this.testArea.appendChild(ul);
+	this.testArea.appendChild(div);
+
+
+	// This will cause the div to be cached.
+	var id = nodeRoute.getID(div);
+
+	var nodeS = [];
+	nodeS[3] = "SPAN";
+	var patches = [
+		{"type":"insert","node":nodeS,"route":id.substr(0, id.length - 2),"ref":"1"}
+	];
+
+	apply(document, patches);
+
+	QUnit.notEqual(nodeRoute.nodeCache[id], div, "not the div");
 });
