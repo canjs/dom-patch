@@ -29,20 +29,20 @@
     "main": "patch.js",
     "directories": {
       "lib": "src"
-    },
-    "npmIgnore": [
-      "testee"
-    ]
+    }
   },
   "dependencies": {
-    "can": "^3.2.2",
     "node-route": "^1.0.0"
   },
   "devDependencies": {
-    "can-simple-dom": "^1.0.2",
-    "steal": "^0.16.43",
-    "steal-qunit": "0.1.4",
-    "steal-tools": "^0.16.8",
+    "can-map": "^3.0.6",
+    "can-simple-dom": "^1.0.6",
+    "can-stache": "^3.0.21",
+    "can-util": "^3.3.5",
+    "can-vdom": "^3.0.3",
+    "steal": "^1.0.0",
+    "steal-qunit": "^1.0.0",
+    "steal-tools": "^1.0.0",
     "testee": "^0.3.0"
   }
 }

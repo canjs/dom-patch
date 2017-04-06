@@ -2,19 +2,19 @@ var QUnit = require("steal-qunit");
 var loader = require("@loader");
 
 var patch = require("dom-patch");
-var simpleDOM = require("can-simple-dom");
+var makeDocument = require("can-vdom/make-document/make-document");
 var NodeProp = require("../node_prop");
 
 QUnit.module("dom-patch/patch", {
 	setup: function(done){
-		this.document = new simpleDOM.Document();
+		this.document = makeDocument();
 
 		this.testArea = this.document.createElement("div");
 		this.document.documentElement.appendChild(this.testArea);
 	},
 	teardown: function(){
-		this.testArea.innerHTML = "";
 		patch.deregister();
+		this.testArea.innerHTML = "";
 	}
 });
 

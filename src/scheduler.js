@@ -57,6 +57,9 @@ exports.register = function(callback){
 exports.unregister = function(callback){
 	if(arguments.length === 0) {
 		callbacks = [];
+		changedRoutes = {};
+		changes.length = 0;
+		globals.length = 0;
 		return;
 	}
 
