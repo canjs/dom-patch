@@ -1,6 +1,6 @@
 {
   "name": "dom-patch",
-  "version": "1.0.4",
+  "version": "2.0.0-alpha.0",
   "description": "Patch dom nodes",
   "main": "dist/cjs/patch.js",
   "directories": {
