@@ -49,6 +49,13 @@ var handlers = {
 		}
 	},
 
+	replace: function(patch, document, patchOptions){
+		var node = deserialize(patch.node, false, patchOptions);
+		var parent = nodeRoute.getNode(patch.route);
+		var ref = nodeRoute.findNode("0."+patch.ref, parent);
+		parent.replaceChild(node, ref);
+	},
+
 	remove: function(patch){
 		var parent = nodeRoute.getNode(patch.route);
 		var node = nodeRoute.getNode(patch.child);
