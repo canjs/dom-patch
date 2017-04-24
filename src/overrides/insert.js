@@ -38,14 +38,27 @@ module.exports = function(Node){
 		return res;
 	};
 
+	var replaceChild = proto.replaceChild;
+	proto.replaceChild = function(newChild, oldChild){
+		var refIndex = nodeRoute.indexOfParent(this, oldChild);
+		var children = getChildren(newChild);
+		var res = replaceChild.apply(this, arguments);
+
+		var parent = this;
+		children.forEach(function(child){
+			registerForDiff(child, parent, refIndex, "replace");
+		});
+	};
+
 	return function(){
 		proto.appendChild = appendChild;
 		proto.insertBefore = insertBefore;
+		proto.replaceChild = replaceChild;
 	};
 
 };
 
-function registerForDiff(child, parent, refIndex){
+function registerForDiff(child, parent, refIndex, type){
 	if(inDocument(parent)) {
 		markAsInDocument(child);
 
@@ -54,7 +67,7 @@ function registerForDiff(child, parent, refIndex){
 		nodeRoute.purgeSiblings(child);
 
 		schedule(parent, {
-			type: "insert",
+			type: type || "insert",
 			node: serialize(child),
 			ref: refIndex
 		});
