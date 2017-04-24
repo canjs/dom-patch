@@ -13,9 +13,11 @@ var elementProps = [
 module.exports = function(Node, doc){
 	var element = doc.createElement("fake-el"); // unknown el
 	var Element = element.constructor;
+	var CSSStyleDeclaration = element.style.constructor;
 
 	watchAll(Node.prototype, nodeProps);
 	watchAll(Element.prototype, elementProps);
+	watchStyle();
 
 	function watchAll(proto, props) {
 		props.forEach(function(prop){
@@ -36,8 +38,26 @@ module.exports = function(Node, doc){
 			},
 			set: function(val){
 				this[priv] = val;
-
 				scheduleIfInDocument(this, prop, val, type);
+			}
+		});
+	}
+
+	function watchStyle() {
+		var proto = CSSStyleDeclaration.prototype;
+		var desc = Object.getOwnPropertyDescriptor(proto, "cssText");
+		Object.defineProperty(proto, "cssText", {
+			configurable: true,
+			enumerable: true,
+			get: function(){
+				return this._cssText;
+			},
+			set: function(val){
+				this._cssText = val;
+				desc.set.apply(this, arguments);
+				var node = this.__node;
+
+				scheduleIfInDocument(node, null, val, "style");
 			}
 		});
 	}

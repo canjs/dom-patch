@@ -31,6 +31,11 @@ var handlers = {
 		el[patch.prop] = patch.value;
 	},
 
+	style: function(patch){
+		var node = nodeRoute.getNode(patch.route);
+		node.style.cssText = patch.value;
+	},
+
 	globalEvent: function(patch, document, patchOptions){
 		var fn = patch.action === "add" ? "addEventListener" : "removeEventListener";
 		window[fn](patch.name, patchOptions.globalEventHandler);
