@@ -1,5 +1,7 @@
 # dom-patch
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/canjs/dom-patch.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/canjs/dom-patch.svg?branch=master)](https://travis-ci.org/canjs/dom-patch)
 [![npm version](https://badge.fury.io/js/dom-patch.svg)](http://badge.fury.io/js/dom-patch)
 
