@@ -1,3 +1,3 @@
-require("dom-patch/overrides/overrides_test");
-require("dom-patch/patch/patch_test");
-require("dom-patch/apply/apply_test");
+require("dom-patch/src/overrides/overrides_test");
+require("dom-patch/src/patch/patch_test");
+require("dom-patch/src/apply/apply_test");
