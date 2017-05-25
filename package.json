@@ -2,13 +2,19 @@
   "name": "dom-patch",
   "version": "2.0.0-alpha.2",
   "description": "Patch dom nodes",
-  "main": "dist/cjs/patch.js",
+  "main": "src/patch.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
+    "preversion": "npm test && npm run build",
+    "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
+    "postversion": "git push --tags && git checkout master && git branch -D release && git push",
+    "release:pre": "npm version prerelease && npm publish",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish",
     "build": "node build.js",
-    "prepublish": "node build.js",
     "test": "testee src/apply/test.html src/patch/test.html --browsers firefox --reporter Spec"
   },
   "repository": {
@@ -25,14 +31,8 @@
     "url": "https://github.com/canjs/dom-patch/issues"
   },
   "homepage": "https://github.com/canjs/dom-patch#readme",
-  "system": {
-    "main": "patch.js",
-    "directories": {
-      "lib": "src"
-    }
-  },
   "dependencies": {
-    "node-route": "^1.0.0"
+    "node-route": "^1.0.5"
   },
   "devDependencies": {
     "can-map": "^3.0.6",
