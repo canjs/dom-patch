@@ -1,4 +1,5 @@
 var nodeRoute = require("node-route");
+var patchOpts = require("./patch/patch-options");
 
 var changedRoutes = {},
 	changes = [],
@@ -7,8 +8,14 @@ var changedRoutes = {},
 	callbacks = [];
 
 exports.schedule = function schedule(el, data){
-	var route = nodeRoute.getID(el);
-	data.route = route;
+	if(patchOpts.collapseTextNodes && el.nodeType === 3) {
+		var routeInfo = nodeRoute.getRoute(el, { collapseTextNodes: true });
+		data.route = routeInfo.id;
+		data.nodeValue = routeInfo.value;
+	} else {
+		var route = nodeRoute.getID(el);
+		data.route = route;
+	}
 
 	changes.push(data);
 	exports.scheduleFlush();
@@ -43,11 +50,10 @@ exports.flushChanges = function flushChanges(){
 	changes.length = 0;
 	globals.length = 0;
 
+	flushScheduled = false;
 	callbacks.forEach(function(cb){
 		cb(domChanges);
 	});
-
-	flushScheduled = false;
 };
 
 exports.register = function(callback){

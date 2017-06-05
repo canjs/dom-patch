@@ -2,6 +2,7 @@ var schedule = require("../scheduler").schedule;
 var nodeRoute = require("node-route");
 var markAsInDocument = require("./util/mark_in_document");
 var inDocument = require("./util/in_document");
+var patchOpts = require("../patch/patch-options");
 var serialize = require("../node_serialization").serialize;
 
 var DOCUMENT_FRAGMENT_NODE = 11;
@@ -31,6 +32,7 @@ module.exports = function(Node){
 		var res = insertBefore.apply(this, arguments);
 
 		var parent = this;
+
 		children.forEach(function(child){
 			registerForDiff(child, parent, refIndex);
 		});

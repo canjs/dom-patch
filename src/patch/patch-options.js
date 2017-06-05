@@ -1,0 +1,1 @@
+exports.collapseTextNodes = false;

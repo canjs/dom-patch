@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/canjs/dom-patch#readme",
   "dependencies": {
-    "node-route": "^1.0.5"
+    "node-route": "^1.1.0"
   },
   "devDependencies": {
     "can-map": "^3.0.6",
