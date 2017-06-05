@@ -76,3 +76,51 @@ QUnit.test("setting className is serialized as a node patch", function(patches){
 
 	QUnit.stop();
 });
+
+QUnit.module("dom-patch/patch {collapseTextNodes}", {
+	setup: function(done){
+		patch.collapseTextNodes = true;
+		this.document = makeDocument();
+
+		this.testArea = this.document.createElement("div");
+		this.document.documentElement.appendChild(this.testArea);
+	},
+	teardown: function(){
+		patch.deregister();
+		patch.collapseTextNodes = false;
+		this.testArea.innerHTML = "";
+	}
+});
+
+QUnit.test("Ignores consecutive TextNodes", function(){
+	var document = this.document;
+	var ta = this.testArea;
+
+	var count = 0;
+	patch(document, function(patches){
+		count++;
+
+		if(count === 1) {
+			// Changing the value should cause a text patch to come
+			// around next
+			tn2.nodeValue = "TWO";
+		} else if(count === 2) {
+			// test
+			QUnit.equal(patches.length, 1);
+			QUnit.equal(patches[0].nodeValue, "oneTWO");
+			QUnit.start();
+		}
+	});
+
+	ta.appendChild(document.createTextNode("one"));
+	var tn2 = document.createTextNode("two");
+	ta.appendChild(tn2);
+
+	var span = document.createElement("span");
+	ta.appendChild(span);
+
+	ta.appendChild(document.createTextNode("three"));
+	ta.appendChild(document.createTextNode("four"));
+
+	QUnit.stop();
+})

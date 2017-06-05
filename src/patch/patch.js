@@ -1,3 +1,4 @@
+var patchOptions = require("./patch-options");
 var scheduler = require("../scheduler");
 var markAsInDocument = require("../overrides/util/mark_in_document");
 
@@ -15,6 +16,13 @@ exports = module.exports = bind;
 exports.bind = bind;
 exports.unbind = unbind;
 exports.deregister = deregister;
+
+// Forward on the collapseTextNodes option to the scheduler.
+Object.defineProperty(exports, "collapseTextNodes", {
+	set: function(val){
+		patchOptions.collapseTextNodes = val;
+	}
+});
 
 // Used to keep track of documents we are listening to.
 var listeningDocs = [];
