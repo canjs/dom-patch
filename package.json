@@ -38,7 +38,7 @@
     "can-map": "^3.0.6",
     "can-simple-dom": "^1.0.6",
     "can-stache": "^3.0.21",
-    "can-util": "^3.3.5",
+    "can-util": "^3.8.4",
     "can-vdom": "^3.0.3",
     "steal": "^1.0.0",
     "steal-qunit": "^1.0.0",
