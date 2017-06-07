@@ -107,7 +107,7 @@ QUnit.test("Ignores consecutive TextNodes", function(){
 		} else if(count === 2) {
 			// test
 			QUnit.equal(patches.length, 1);
-			QUnit.equal(patches[0].nodeValue, "oneTWO");
+			QUnit.equal(patches[0].value, "oneTWO");
 			QUnit.start();
 		}
 	});

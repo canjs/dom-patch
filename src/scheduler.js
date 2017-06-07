@@ -7,14 +7,18 @@ var changedRoutes = {},
 	flushScheduled,
 	callbacks = [];
 
+var nrOptions = { collapseTextNodes: true };
+
 exports.schedule = function schedule(el, data){
-	if(patchOpts.collapseTextNodes && el.nodeType === 3) {
-		var routeInfo = nodeRoute.getRoute(el, { collapseTextNodes: true });
+	var collapseTextNodes = patchOpts.collapseTextNodes;
+	if(collapseTextNodes && el.nodeType === 3) {
+		var routeInfo = nodeRoute.getRoute(el, nrOptions);
 		data.route = routeInfo.id;
-		data.nodeValue = routeInfo.value;
+		data.value = routeInfo.value;
+	} else if(collapseTextNodes) {
+		data.route = nodeRoute.getID(el, nrOptions);
 	} else {
-		var route = nodeRoute.getID(el);
-		data.route = route;
+		data.route = nodeRoute.getID(el);
 	}
 
 	changes.push(data);
