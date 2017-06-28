@@ -6,7 +6,7 @@ exports.serialize = nodeToObject;
 exports.deserialize = objectToNode;
 
 function nodeToObject(node){
-	var objNode = [], i;
+	var objNode = Object.create(null), i;
 
 	if (node.nodeType === 3) {
 		objNode[NodeProp.TEXT] = node.nodeValue;
