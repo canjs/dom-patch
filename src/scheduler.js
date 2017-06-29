@@ -1,8 +1,7 @@
 var nodeRoute = require("node-route");
 var patchOpts = require("./patch/patch-options");
 
-var changedRoutes = {},
-	changes = [],
+var changes = [],
 	globals = [],
 	flushScheduled,
 	callbacks = [];
@@ -50,11 +49,10 @@ exports.flushChanges = function flushChanges(){
 		domChanges.push(data);
 	});
 
-	changedRoutes = {};
 	changes.length = 0;
 	globals.length = 0;
-
 	flushScheduled = false;
+	
 	callbacks.forEach(function(cb){
 		cb(domChanges);
 	});
@@ -67,7 +65,6 @@ exports.register = function(callback){
 exports.unregister = function(callback){
 	if(arguments.length === 0) {
 		callbacks = [];
-		changedRoutes = {};
 		changes.length = 0;
 		globals.length = 0;
 		return;

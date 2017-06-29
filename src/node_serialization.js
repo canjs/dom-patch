@@ -1,8 +1,8 @@
 var NodeProp = require("./node_prop");
 var setAttribute = require("./setattribute");
+var has = Object.prototype.hasOwnProperty;
 
 exports.serialize = nodeToObject;
-
 exports.deserialize = objectToNode;
 
 function nodeToObject(node){
@@ -57,10 +57,10 @@ function objectToNode(objNode, insideSvg, diffOptions) {
 	}
 
 	var node, i;
-	if (objNode.hasOwnProperty(NodeProp.TEXT)) {
+	if (has.call(objNode, NodeProp.TEXT)) {
 		node = document.createTextNode(objNode[NodeProp.TEXT]);
-	} else if (objNode.hasOwnProperty(NodeProp.COMMENT)) {
-		node = document.createComment(objNode[COMMENT]);
+	} else if (has.call(objNode, NodeProp.COMMENT)) {
+		node = document.createComment(objNode[NodeProp.COMMENT]);
 	} else {
 		if (objNode[NodeProp.NODE_NAME] === 'svg' || insideSvg) {
 			node = document.createElementNS('http://www.w3.org/2000/svg', objNode[NodeProp.NODE_NAME]);

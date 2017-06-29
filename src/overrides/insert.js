@@ -43,13 +43,12 @@ module.exports = function(Node){
 	var replaceChild = proto.replaceChild;
 	proto.replaceChild = function(newChild, oldChild){
 		var refIndex = nodeRoute.indexOfParent(this, oldChild);
+		var doc = newChild.ownerDocument;
 		var children = getChildren(newChild);
 		var res = replaceChild.apply(this, arguments);
 
 		var parent = this;
-		children.forEach(function(child){
-			registerForDiff(child, parent, refIndex, "replace");
-		});
+		registerForDiff(children, this, refIndex, "replace");
 	};
 
 	return function(){
@@ -60,13 +59,33 @@ module.exports = function(Node){
 
 };
 
+function toFragmentLike(array) {
+	var frag = Object.create(null);
+	frag.childNodes = array;
+	frag.childNodes.item = function(idx){
+		return array[idx];
+	};
+	frag.forEach = Array.prototype.forEach.bind(array);
+	frag.nodeName = "#document-fragment";
+	frag.length = array.length;
+	return frag;
+}
+
 function registerForDiff(child, parent, refIndex, type){
 	if(inDocument(parent)) {
-		markAsInDocument(child);
+		var children = [child];
+		var isArray = Array.isArray(child);
+		if(isArray) {
+			children = child = toFragmentLike(child);
+		}
 
-		// Cache this module and remove all children from the cache.
-		nodeRoute.getID(child);
-		nodeRoute.purgeSiblings(child);
+		children.forEach(function(c){
+			markAsInDocument(c);
+
+			// Cache this module and remove all children from the cache.
+			nodeRoute.getID(c);
+			nodeRoute.purgeSiblings(c);
+		});
 
 		schedule(parent, {
 			type: type || "insert",
