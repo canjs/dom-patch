@@ -9,5 +9,6 @@ module.exports = {
 	CHECKED: 7,
 	SELECTED: 8,
 	EVENTS: 9,
-	CLASS: 10
+	CLASS: 10,
+	FRAGMENT: 11
 };

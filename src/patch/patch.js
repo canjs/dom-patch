@@ -28,6 +28,7 @@ Object.defineProperty(exports, "collapseTextNodes", {
 var listeningDocs = [];
 // Functions that when called will undo DOM wrapping.
 var overrideTeardowns = [];
+var _over = typeof Symbol === "function" ? Symbol("_override") : "__patch-override";
 
 
 /**
@@ -43,16 +44,22 @@ function bind(document, callback){
 	var Node = getNodeConstructor(document);
 
 	if(listeningDocs.indexOf(document) === -1) {
-		overrides.forEach(function(override){
-			var res = override(Node, document);
-			if(typeof res !== "undefined") {
-				overrideTeardowns.push(res);
-			}
-		});
+		if(!Node[_over]) {
+			overrides.forEach(function(override){
+				var res = override(Node, document);
+				if(typeof res !== "undefined") {
+					overrideTeardowns.push(res);
+				}
+			});
+			overrideTeardowns.push(function(){
+				Node[_over] = undefined;
+			});
+		}
 		markAsInDocument(document.documentElement);
 		listeningDocs.push(document);
 	}
 
+	Node[_over] = true;
 	scheduler.register(callback);
 }
 

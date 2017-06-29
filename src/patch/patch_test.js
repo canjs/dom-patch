@@ -1,5 +1,4 @@
 var QUnit = require("steal-qunit");
-var loader = require("@loader");
 
 var patch = require("dom-patch");
 var makeDocument = require("can-vdom/make-document/make-document");

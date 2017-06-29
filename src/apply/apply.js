@@ -43,7 +43,7 @@ var handlers = {
 
 	insert: function(patch, document, patchOptions){
 		var node = deserialize(patch.node, false, patchOptions);
-		var parent = nodeRoute.getNode(patch.route);
+		var parent = nodeRoute.getNode(patch.route, document);
 
 		if(patch.ref) {
 			var ref = nodeRoute.findNode("0."+patch.ref, parent);
@@ -56,14 +56,14 @@ var handlers = {
 
 	replace: function(patch, document, patchOptions){
 		var node = deserialize(patch.node, false, patchOptions);
-		var parent = nodeRoute.getNode(patch.route);
+		var parent = nodeRoute.getNode(patch.route, document);
 		var ref = nodeRoute.findNode("0."+patch.ref, parent);
 		parent.replaceChild(node, ref);
 	},
 
-	remove: function(patch){
+	remove: function(patch, document){
 		var parent = nodeRoute.getNode(patch.route);
-		var node = nodeRoute.getNode(patch.child);
+		var node = nodeRoute.getNode(patch.child, document);
 
 		if(!node) {
 			return;
