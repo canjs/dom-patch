@@ -2,7 +2,9 @@ var schedule = require("../scheduler").schedule;
 var nodeRoute = require("node-route");
 var markAsInDocument = require("./util/mark_in_document");
 var inDocument = require("./util/in_document");
+var patchOpts = require("../patch/patch-options");
 
+var nrOptions = { collapseTextNodes: true };
 module.exports = function(Node){
 	var proto = Node.prototype;
 
@@ -17,9 +19,10 @@ module.exports = function(Node){
 			nodeRoute.purgeSiblings(child);
 			nodeRoute.purgeNode(child);
 
+			var opts = patchOpts.collapseTextNodes ? nrOptions : void 0;
 			schedule(parent, {
 				type: "remove",
-				child: nodeRoute.getID(child)
+				child: nodeRoute.getID(child, opts)
 			});
 
 		}
