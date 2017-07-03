@@ -16,6 +16,8 @@ exports = module.exports = bind;
 exports.bind = bind;
 exports.unbind = unbind;
 exports.deregister = deregister;
+// Expose this so code can flush current changes before unbinding.
+exports.flush = scheduler.flushChanges;
 
 // Forward on the collapseTextNodes option to the scheduler.
 Object.defineProperty(exports, "collapseTextNodes", {
