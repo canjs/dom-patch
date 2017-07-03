@@ -40,7 +40,7 @@
     "can-stache": "^3.0.21",
     "can-util": "^3.3.5",
     "can-vdom": "^3.0.3",
-    "steal": "^1.0.0",
+    "steal": "^1.5.5",
     "steal-qunit": "^1.0.0",
     "steal-tools": "^1.0.0",
     "testee": "^0.3.0"
