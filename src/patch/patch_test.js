@@ -122,4 +122,25 @@ QUnit.test("Ignores consecutive TextNodes", function(){
 	ta.appendChild(document.createTextNode("four"));
 
 	QUnit.stop();
-})
+});
+
+QUnit.test("Callback is not called if there are no changes", function(){
+	var document = this.document;
+	var ta = this.testArea;
+
+	var called = false;
+	patch(document, function(changes){
+		console.warn("This shouldn't have happened", changes);
+		called = true;
+	});
+
+	// Flush should flush any changes, check in this case there shouldn't be any.
+	patch.flush();
+
+	setTimeout(function(){
+		QUnit.equal(called, false, "The patch callback was not called");
+		QUnit.start();
+	}, 50);
+
+	QUnit.stop();
+});

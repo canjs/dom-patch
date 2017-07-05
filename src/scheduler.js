@@ -54,7 +54,13 @@ exports.flushChanges = function flushChanges(){
 	flushScheduled = false;
 	
 	callbacks.forEach(function(cb){
-		cb(domChanges);
+		// I know it would make more sense to have this conditional
+		// outside of the forEach, but this code is going to change
+		// to support multiple document observations happening
+		// simultaneously.
+		if(domChanges.length) {
+			cb(domChanges);
+		}
 	});
 };
 
