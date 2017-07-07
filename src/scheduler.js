@@ -4,11 +4,14 @@ var patchOpts = require("./patch/patch-options");
 var changes = [],
 	globals = [],
 	flushScheduled,
-	callbacks = [];
+	documents = {},
+	currentId = 0;
 
 var nrOptions = { collapseTextNodes: true };
 
 exports.schedule = function schedule(el, data){
+	data.docId = el.ownerDocument._domPatchId;
+
 	var collapseTextNodes = patchOpts.collapseTextNodes;
 	if(collapseTextNodes && el.nodeType === 3) {
 		var routeInfo = nodeRoute.getRoute(el, nrOptions);
@@ -39,45 +42,53 @@ exports.scheduleFlush = function scheduleFlush(){
 };
 
 exports.flushChanges = function flushChanges(){
-	var domChanges = [], fn, res;
+	var fn, res,
+		domChanges = Object.keys(documents).reduce(function(obj, id){
+			obj[id] = [];
+			return obj;
+		}, {});
 
 	globals.forEach(function(data){
-		domChanges.push(data);
+		for(var id in domChanges) {
+			domChanges[id].push(data);
+		}
 	});
 
 	changes.forEach(function(data){
-		domChanges.push(data);
+		domChanges[data.docId].push(data);
+		delete data.docId;
 	});
 
 	changes.length = 0;
 	globals.length = 0;
 	flushScheduled = false;
-	
-	callbacks.forEach(function(cb){
-		// I know it would make more sense to have this conditional
-		// outside of the forEach, but this code is going to change
-		// to support multiple document observations happening
-		// simultaneously.
-		if(domChanges.length) {
-			cb(domChanges);
+
+	for(var id in domChanges) {
+		var callback = documents[id];
+		var arr = domChanges[id];
+		if(arr.length > 0) {
+			callback(arr);
 		}
+	}
+};
+
+exports.register = function(document, callback){
+	var docId = ++currentId;
+	Object.defineProperty(document, "_domPatchId", {
+		enumerable: false,
+		value: docId
 	});
+	documents[docId] = callback;
 };
 
-exports.register = function(callback){
-	callbacks.push(callback);
-};
-
-exports.unregister = function(callback){
-	if(arguments.length === 0) {
-		callbacks = [];
+exports.unregister = function(document, callback){
+	var argsLen = arguments.length;
+	if(argsLen === 0) {
+		documents = {};
 		changes.length = 0;
 		globals.length = 0;
 		return;
 	}
-
-	var idx = callbacks.indexOf(callback);
-	if(idx >= 0) {
-		callbacks.splice(idx, 1);
-	}
+	
+	delete documents[document._domPatchId];
 };

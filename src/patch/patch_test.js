@@ -76,6 +76,38 @@ QUnit.test("setting className is serialized as a node patch", function(patches){
 	QUnit.stop();
 });
 
+QUnit.test("Can patch multiple docs at once", function(){
+	var doc1 = makeDocument();
+	var doc2 = makeDocument();
+	doc1.documentElement.insertBefore(doc1.createElement("head"), doc1.body);
+	doc2.documentElement.insertBefore(doc2.createElement("head"), doc2.body);
+
+	patch.flush();
+
+	patch(doc1, function(changes){
+		QUnit.equal(changes.length, 1);
+		var instr = changes[0];
+		QUnit.equal(instr.type, "insert");
+		QUnit.equal(instr.route, "0.1");
+		QUnit.equal(instr.node[3], "SPAN");
+	});
+
+	patch(doc2, function(changes){
+		QUnit.equal(changes.length, 1);
+		var instr = changes[0];
+		QUnit.equal(instr.type, "insert");
+		QUnit.equal(instr.route, "0.0");
+		QUnit.equal(instr.node[3], "META");
+
+		QUnit.start();
+	});
+
+	doc1.body.appendChild(doc1.createElement("span"));
+	doc2.head.appendChild(doc2.createElement("meta"));
+
+	QUnit.stop();
+});
+
 QUnit.module("dom-patch/patch {collapseTextNodes}", {
 	setup: function(done){
 		patch.collapseTextNodes = true;
@@ -144,3 +176,4 @@ QUnit.test("Callback is not called if there are no changes", function(){
 
 	QUnit.stop();
 });
+

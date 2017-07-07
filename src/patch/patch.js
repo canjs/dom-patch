@@ -62,7 +62,7 @@ function bind(document, callback){
 	}
 
 	Node[_over] = true;
-	scheduler.register(callback);
+	scheduler.register(document, callback);
 }
 
 function getNodeConstructor(document){
