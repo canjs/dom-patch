@@ -55,7 +55,10 @@ exports.flushChanges = function flushChanges(){
 	});
 
 	changes.forEach(function(data){
-		domChanges[data.docId].push(data);
+		var arr = domChanges[data.docId];
+		if(arr) {
+			arr.push(data);
+		}
 		delete data.docId;
 	});
 
