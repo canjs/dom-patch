@@ -58,8 +58,8 @@ QUnit.test("Inserting a sibling will reset ids", function(){
 	ul.insertBefore(this.doc.createElement("li"), firstLi);
 
 	// It should be removed from the nodeCache
-	equal(nodeRoute.nodeCache["0.1.0.0.0.0"], undefined, "SPAN is no longer in the map");
-	equal(nodeRoute.nodeCache["0.1.0.0.0"], ul.firstChild, "The new LI is in the map");
+	equal(nodeRoute.nodeCache["0.2.0.0.0.0"], undefined, "SPAN is no longer in the map");
+	equal(nodeRoute.nodeCache["0.2.0.0.0"], ul.firstChild, "The new LI is in the map");
 });
 
 QUnit.test("Setting a TextNode will create an id", function(){
@@ -72,5 +72,5 @@ QUnit.test("Setting a TextNode will create an id", function(){
 
 	map.attr("name", "wilbur");
 
-	equal(nodeRoute.nodeCache["0.1.0"], textNode, "it is the text node");
+	equal(nodeRoute.nodeCache["0.2.0"], textNode, "it is the text node");
 });

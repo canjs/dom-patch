@@ -88,7 +88,7 @@ QUnit.test("Can patch multiple docs at once", function(){
 		QUnit.equal(changes.length, 1);
 		var instr = changes[0];
 		QUnit.equal(instr.type, "insert");
-		QUnit.equal(instr.route, "0.1");
+		QUnit.equal(instr.route, "0.2");
 		QUnit.equal(instr.node[3], "SPAN");
 	});
 
@@ -176,4 +176,3 @@ QUnit.test("Callback is not called if there are no changes", function(){
 
 	QUnit.stop();
 });
-

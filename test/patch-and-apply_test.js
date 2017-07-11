@@ -8,8 +8,6 @@ var nodeRoute = require("node-route");
 function makeVdomArea() {
 	var doc = makeDocument();
 	var vdomTestArea = doc.createElement("div");
-	doc.documentElement.insertBefore(doc.createElement("head"),
-		doc.documentElement.firstChild);
 	doc.body.appendChild(vdomTestArea);
 	return {
 		document: doc,
@@ -29,7 +27,6 @@ QUnit.module("patch and apply", {
 		var docType = this.otherDocument.firstChild;
 		var html = docType.nextSibling;
 		docType.parentNode.removeChild(docType);
-		//html.removeChild(html.firstChild); // Remove the head
 
 		this.testArea = this.otherDocument.createElement("div");
 		this.otherDocument.body.appendChild(this.testArea);
