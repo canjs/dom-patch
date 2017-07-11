@@ -88,7 +88,7 @@ QUnit.test("Can patch multiple docs at once", function(){
 		QUnit.equal(changes.length, 1);
 		var instr = changes[0];
 		QUnit.equal(instr.type, "insert");
-		QUnit.equal(instr.route, "0.1");
+		QUnit.equal(instr.route, "0.2");
 		QUnit.equal(instr.node[3], "SPAN");
 	});
 
@@ -177,3 +177,49 @@ QUnit.test("Callback is not called if there are no changes", function(){
 	QUnit.stop();
 });
 
+QUnit.test("'ref' property is correct using replaceChild", function(){
+	var document = this.document;
+	var ta = this.testArea;
+
+	patch(document, function(changes){
+		var instr = changes[3];
+		QUnit.equal(instr.ref, 1, "TextNodes ignored");
+
+		QUnit.start();
+	});
+
+	var div = document.createElement("div");
+	var sec = document.createElement("section");
+
+	ta.appendChild(document.createTextNode("one"));
+	ta.appendChild(document.createTextNode("two"));
+	ta.appendChild(div);
+
+	ta.replaceChild(sec, div);
+
+	QUnit.stop();
+});
+
+
+QUnit.test("'ref' property is correct using insertBefore", function(){
+	var document = this.document;
+	var ta = this.testArea;
+
+	patch(document, function(changes){
+		var instr = changes[3];
+		QUnit.equal(instr.ref, 1, "TextNodes ignored");
+
+		QUnit.start();
+	});
+
+	var div = document.createElement("div");
+	var sec = document.createElement("section");
+
+	ta.appendChild(document.createTextNode("one"));
+	ta.appendChild(document.createTextNode("two"));
+	ta.appendChild(div);
+
+	ta.insertBefore(sec, div);
+
+	QUnit.stop();
+});
