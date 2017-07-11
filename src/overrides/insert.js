@@ -6,6 +6,9 @@ var patchOpts = require("../patch/patch-options");
 var serialize = require("../node_serialization").serialize;
 
 var DOCUMENT_FRAGMENT_NODE = 11;
+var patchOpts = require("../patch/patch-options");
+
+var nrOptions = { collapseTextNodes: true };
 
 module.exports = function(Node){
 	var proto = Node.prototype;
@@ -26,7 +29,8 @@ module.exports = function(Node){
 
 	var insertBefore = proto.insertBefore;
 	proto.insertBefore = function(child, ref){
-		var refIndex = nodeRoute.indexOfParent(this, ref);
+		var refIndex = nodeRoute.indexOfParent(this, ref,
+			patchOpts.collapseTextNodes ? nrOptions : void 0);
 		var children = getChildren(child, true);
 
 		var res = insertBefore.apply(this, arguments);
@@ -42,7 +46,8 @@ module.exports = function(Node){
 
 	var replaceChild = proto.replaceChild;
 	proto.replaceChild = function(newChild, oldChild){
-		var refIndex = nodeRoute.indexOfParent(this, oldChild);
+		var refIndex = nodeRoute.indexOfParent(this, oldChild,
+			patchOpts.collapseTextNodes ? nrOptions : void 0);
 		var doc = newChild.ownerDocument;
 		var children = getChildren(newChild);
 		var res = replaceChild.apply(this, arguments);

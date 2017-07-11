@@ -176,3 +176,50 @@ QUnit.test("Callback is not called if there are no changes", function(){
 
 	QUnit.stop();
 });
+
+QUnit.test("'ref' property is correct using replaceChild", function(){
+	var document = this.document;
+	var ta = this.testArea;
+
+	patch(document, function(changes){
+		var instr = changes[3];
+		QUnit.equal(instr.ref, 1, "TextNodes ignored");
+
+		QUnit.start();
+	});
+
+	var div = document.createElement("div");
+	var sec = document.createElement("section");
+
+	ta.appendChild(document.createTextNode("one"));
+	ta.appendChild(document.createTextNode("two"));
+	ta.appendChild(div);
+
+	ta.replaceChild(sec, div);
+
+	QUnit.stop();
+});
+
+
+QUnit.test("'ref' property is correct using insertBefore", function(){
+	var document = this.document;
+	var ta = this.testArea;
+
+	patch(document, function(changes){
+		var instr = changes[3];
+		QUnit.equal(instr.ref, 1, "TextNodes ignored");
+
+		QUnit.start();
+	});
+
+	var div = document.createElement("div");
+	var sec = document.createElement("section");
+
+	ta.appendChild(document.createTextNode("one"));
+	ta.appendChild(document.createTextNode("two"));
+	ta.appendChild(div);
+
+	ta.insertBefore(sec, div);
+
+	QUnit.stop();
+});
