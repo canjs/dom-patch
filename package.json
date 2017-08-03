@@ -1,6 +1,6 @@
 {
   "name": "dom-patch",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Patch dom nodes",
   "main": "src/patch.js",
   "directories": {
