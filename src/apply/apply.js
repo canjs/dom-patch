@@ -45,7 +45,7 @@ var handlers = {
 		var node = deserialize(patch.node, false, patchOptions);
 		var parent = nodeRoute.getNode(patch.route, document);
 
-		if(patch.ref) {
+		if(patch.ref != null) {
 			var ref = nodeRoute.findNode("0."+patch.ref, parent);
 			parent.insertBefore(node, ref);
 			nodeRoute.purgeSiblings(node);
