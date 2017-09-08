@@ -1,5 +1,10 @@
 language: node_js
 node_js: 8
+addons:
+  firefox: "latest-esr"
+  apt:
+    packages:
+      - "dbus-x11"
 script: npm test
 before_install:
   - "export DISPLAY=:99.0"

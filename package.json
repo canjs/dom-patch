@@ -15,10 +15,10 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "build": "node build.js",
-	"debug:node": "node --inspect-brk node_modules/.bin/qunit src/patch/patch_test.js",
-	"test:node": "qunit src/patch/patch_test.js",
+    "debug:node": "node --inspect-brk node_modules/.bin/qunit src/patch/patch_test.js",
+    "test:node": "qunit src/patch/patch_test.js",
     "test:browser": "testee test/test.html --browsers firefox --reporter Spec",
-	"test": "npm run test:node && npm run test:browser"
+    "test": "npm run test:node && npm run test:browser"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/canjs/dom-patch#readme",
   "dependencies": {
+    "can-globals": "^0.2.3",
     "node-route": "^1.2.0"
   },
   "devDependencies": {
