@@ -55,9 +55,14 @@ module.exports = function(Node, doc){
 			set: function(val){
 				this._cssText = val;
 				desc.set.apply(this, arguments);
+
+				// This is can-simple-dom specific code :(
+				// Do we even need this?
 				var node = this.__node;
 
-				scheduleIfInDocument(node, null, val, "style");
+				if(node) {
+					scheduleIfInDocument(node, null, val, "style");
+				}
 			}
 		});
 	}
