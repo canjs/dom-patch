@@ -38,6 +38,7 @@ module.exports = function(Node, doc){
 			},
 			set: function(val){
 				this[priv] = val;
+
 				scheduleIfInDocument(this, prop, val, type);
 			}
 		});
