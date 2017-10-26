@@ -28,8 +28,16 @@ function scheduleIfInDocument(node, attributeName, attributeValue){
 }
 
 function getElementConstructor(document){
+	var window = document.defaultView;
+	if(window) {
+		if(window.Element) {
+			return window.Element;
+		}
+	}
+
 	var div = document.createElement("div");
 	var elementProto = Object.getPrototypeOf(div);
 
 	return elementProto.constructor;
+
 }

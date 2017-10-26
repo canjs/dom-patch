@@ -1,12 +1,12 @@
-var QUnit = require("qunitjs");
-
-var patch = require("./patch");
-var makeDocument = require("can-vdom/make-document/make-document");
-var NodeProp = require("../node_prop");
+const patch = require("./patch");
+const {JSDOM} = require("jsdom");
+const NodeProp = require("../node_prop");
+const QUnit = require("qunitjs");
 
 QUnit.module("dom-patch/patch", {
 	beforeEach: function(done){
-		this.document = makeDocument();
+		let document = new JSDOM().window.document;
+		this.document = document;
 
 		this.testArea = this.document.createElement("div");
 		this.document.documentElement.appendChild(this.testArea);
@@ -43,16 +43,14 @@ QUnit.test("works with properties", function(assert){
 
 	patch(document, function onpatches(patches){
 		assert.equal(patches.length, 2, "There are two patches");
-		assert.equal(patches[1].type, "prop", "The second patch is prop");
+		assert.equal(patches[1].type, "attribute", "The second patch is attr");
 
 		done();
 	});
 
 	var span = document.createElement("span");
-
 	this.testArea.appendChild(span);
 
-	debugger;
 	span.className = "foobar";
 });
 
@@ -75,8 +73,8 @@ QUnit.test("setting className is serialized as a node patch", function(assert){
 
 QUnit.test("Can patch multiple docs at once", function(assert){
 	var done = assert.async();
-	var doc1 = makeDocument();
-	var doc2 = makeDocument();
+	var doc1 = new JSDOM().window.document;
+	var doc2 = new JSDOM().window.document;
 	doc1.documentElement.insertBefore(doc1.createElement("head"), doc1.body);
 	doc2.documentElement.insertBefore(doc2.createElement("head"), doc2.body);
 
@@ -107,7 +105,7 @@ QUnit.test("Can patch multiple docs at once", function(assert){
 QUnit.module("dom-patch/patch {collapseTextNodes}", {
 	beforeEach: function(){
 		patch.collapseTextNodes = true;
-		this.document = makeDocument();
+		this.document = new JSDOM().window.document;
 
 		this.testArea = this.document.createElement("div");
 		this.document.documentElement.appendChild(this.testArea);

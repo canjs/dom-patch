@@ -14,6 +14,7 @@ module.exports = function(Node, doc){
 	var element = doc.createElement("fake-el"); // unknown el
 	var Element = element.constructor;
 	var CSSStyleDeclaration = element.style.constructor;
+	var teardowns = [];
 
 	watchAll(Node.prototype, nodeProps);
 	watchAll(Element.prototype, elementProps);
@@ -28,26 +29,41 @@ module.exports = function(Node, doc){
 	function watchProperty(proto, info) {
 		var prop = info.prop;
 		var type = info.type;
-		var priv = "_" + prop;
+		var priv = Symbol(`private-${prop}`);
+		var desc = Object.getOwnPropertyDescriptor(proto, prop) || {};
 
 		Object.defineProperty(proto, prop, {
 			configurable: true,
 			enumerable: true,
 			get: function(){
+				if(desc.get) {
+					return desc.get.apply(this, arguments);
+				}
 				return this[priv];
 			},
 			set: function(val){
-				this[priv] = val;
+				if(desc.set) {
+					desc.set.apply(this, arguments);
+				} else {
+					this[priv] = val;
+				}
 
 				scheduleIfInDocument(this, prop, val, type);
 			}
 		});
+
+		if(desc) {
+			teardowns.push(function(){
+				Object.defineProperty(proto, prop, desc);
+			});
+		}
 	}
 
 	function watchStyle() {
 		var proto = CSSStyleDeclaration.prototype;
-		var desc = Object.getOwnPropertyDescriptor(proto, "cssText");
-		Object.defineProperty(proto, "cssText", {
+		var prop = "cssText";
+		var desc = Object.getOwnPropertyDescriptor(proto, prop) || {};
+		Object.defineProperty(proto, prop, {
 			configurable: true,
 			enumerable: true,
 			get: function(){
@@ -66,7 +82,19 @@ module.exports = function(Node, doc){
 				}
 			}
 		});
+
+		if(desc) {
+			teardowns.push(function(){
+				Object.defineProperty(proto, prop, desc);
+			});
+		}
 	}
+
+	return function(){
+		teardowns.forEach(function(fn){
+			fn();
+		});
+	};
 };
 
 function scheduleIfInDocument(node, prop, val, type){

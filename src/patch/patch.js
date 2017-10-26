@@ -66,6 +66,13 @@ function bind(document, callback){
 }
 
 function getNodeConstructor(document){
+	var window = document.defaultView;
+	// Assume defaultView means the right stuff is on the window
+	if(window) {
+		if(window.Node) {
+			return window.Node;
+		}
+	}
 	var tn = document.createElement("div");
 
 	var elementProto = Object.getPrototypeOf(tn);
