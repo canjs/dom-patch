@@ -15,7 +15,10 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "build": "node build.js",
-    "test": "testee src/apply/test.html src/patch/test.html --browsers firefox --reporter Spec"
+	"debug:node": "node --inspect-brk node_modules/.bin/qunit src/patch/patch_test.js",
+	"test:node": "qunit src/patch/patch_test.js",
+    "test:browser": "testee test/test.html --browsers firefox --reporter Spec",
+	"test": "npm run test:node && npm run test:browser"
   },
   "repository": {
     "type": "git",
@@ -40,6 +43,8 @@
     "can-stache": "^3.0.21",
     "can-util": "^3.3.5",
     "can-vdom": "^3.0.3",
+    "jsdom": "^11.3.0",
+    "qunitjs": "^2.4.1",
     "steal": "^1.0.0",
     "steal-qunit": "^1.0.0",
     "steal-tools": "^1.0.0",

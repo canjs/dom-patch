@@ -10,7 +10,6 @@ var markAsInDocument = require("./util/mark_in_document");
 
 var patch = require("dom-patch");
 
-
 QUnit.module("dom-patch overrides", {
 	setup: function(){
 		this.patch = patch;

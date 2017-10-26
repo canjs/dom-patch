@@ -1,30 +1,31 @@
-var QUnit = require("steal-qunit");
-
-var patch = require("dom-patch");
-var makeDocument = require("can-vdom/make-document/make-document");
-var NodeProp = require("../node_prop");
+const patch = require("./patch");
+const {JSDOM} = require("jsdom");
+const NodeProp = require("../node_prop");
+const QUnit = require("qunitjs");
 
 QUnit.module("dom-patch/patch", {
-	setup: function(done){
-		this.document = makeDocument();
+	beforeEach: function(done){
+		let document = new JSDOM().window.document;
+		this.document = document;
 
 		this.testArea = this.document.createElement("div");
 		this.document.documentElement.appendChild(this.testArea);
 	},
-	teardown: function(){
+	afterEach: function(){
 		patch.deregister();
 		this.testArea.innerHTML = "";
 	}
 });
 
-QUnit.test("basics works", function(){
+QUnit.test("basics works", function(assert){
+	var done = assert.async();
 	var document = this.document;
 	patch(document, function onpatches(patches){
-		QUnit.equal(patches.length, 2, "There are two patches");
-		QUnit.equal(patches[0].type, "insert", "The first patch is the insert");
-		QUnit.equal(patches[1].type, "attribute", "The second patch is for the setAttribute");
+		assert.equal(patches.length, 2, "There are two patches");
+		assert.equal(patches[0].type, "insert", "The first patch is the insert");
+		assert.equal(patches[1].type, "attribute", "The second patch is for the setAttribute");
 
-		QUnit.start();
+		done();
 	});
 
 	var span = document.createElement("span");
@@ -34,96 +35,90 @@ QUnit.test("basics works", function(){
 
 	// Set the attributes
 	span.setAttribute("foo", "bar");
-
-	QUnit.stop();
 });
 
-QUnit.test("works with properties", function(){
+QUnit.test("works with properties", function(assert){
+	var done = assert.async();
 	var document = this.document;
 
 	patch(document, function onpatches(patches){
-		QUnit.equal(patches.length, 2, "There are two patches");
-		QUnit.equal(patches[1].type, "prop", "The second patch is prop");
+		assert.equal(patches.length, 2, "There are two patches");
+		assert.equal(patches[1].type, "attribute", "The second patch is attr");
 
-		QUnit.start();
+		done();
 	});
 
 	var span = document.createElement("span");
-
 	this.testArea.appendChild(span);
 
 	span.className = "foobar";
-
-	QUnit.stop();
 });
 
-QUnit.test("setting className is serialized as a node patch", function(patches){
+QUnit.test("setting className is serialized as a node patch", function(assert){
+	var done = assert.async();
 	var document = this.document;
 
 	patch(document, function(patches){
 		var node = patches[0].node;
+		assert.equal(node[NodeProp.CLASS], "active", "Correct className added");
 
-		QUnit.equal(node[NodeProp.CLASS], "active", "Correct className added");
-
-		QUnit.start();
+		done();
 	});
 
 	var span = document.createElement("span");
 	span.className = "active";
 
 	this.testArea.appendChild(span);
-
-	QUnit.stop();
 });
 
-QUnit.test("Can patch multiple docs at once", function(){
-	var doc1 = makeDocument();
-	var doc2 = makeDocument();
+QUnit.test("Can patch multiple docs at once", function(assert){
+	var done = assert.async();
+	var doc1 = new JSDOM().window.document;
+	var doc2 = new JSDOM().window.document;
 	doc1.documentElement.insertBefore(doc1.createElement("head"), doc1.body);
 	doc2.documentElement.insertBefore(doc2.createElement("head"), doc2.body);
 
 	patch.flush();
 
 	patch(doc1, function(changes){
-		QUnit.equal(changes.length, 1);
 		var instr = changes[0];
-		QUnit.equal(instr.type, "insert");
-		QUnit.equal(instr.route, "0.2");
-		QUnit.equal(instr.node[3], "SPAN");
+		assert.equal(changes.length, 1);
+		assert.equal(instr.type, "insert");
+		assert.equal(instr.route, "0.2");
+		assert.equal(instr.node[3], "SPAN");
 	});
 
 	patch(doc2, function(changes){
-		QUnit.equal(changes.length, 1);
 		var instr = changes[0];
-		QUnit.equal(instr.type, "insert");
-		QUnit.equal(instr.route, "0.0");
-		QUnit.equal(instr.node[3], "META");
+		assert.equal(changes.length, 1);
+		assert.equal(instr.type, "insert");
+		assert.equal(instr.route, "0.0");
+		assert.equal(instr.node[3], "META");
 
-		QUnit.start();
+		done();
 	});
 
 	doc1.body.appendChild(doc1.createElement("span"));
 	doc2.head.appendChild(doc2.createElement("meta"));
-
-	QUnit.stop();
 });
 
 QUnit.module("dom-patch/patch {collapseTextNodes}", {
-	setup: function(done){
+	beforeEach: function(){
 		patch.collapseTextNodes = true;
-		this.document = makeDocument();
+		this.document = new JSDOM().window.document;
 
 		this.testArea = this.document.createElement("div");
 		this.document.documentElement.appendChild(this.testArea);
 	},
-	teardown: function(){
+	afterEach: function(){
 		patch.deregister();
 		patch.collapseTextNodes = false;
 		this.testArea.innerHTML = "";
 	}
 });
 
-QUnit.test("Ignores consecutive TextNodes", function(){
+QUnit.test("Ignores consecutive TextNodes", function(assert){
+	var done = assert.async();
 	var document = this.document;
 	var ta = this.testArea;
 
@@ -137,9 +132,9 @@ QUnit.test("Ignores consecutive TextNodes", function(){
 			tn2.nodeValue = "TWO";
 		} else if(count === 2) {
 			// test
-			QUnit.equal(patches.length, 1);
-			QUnit.equal(patches[0].value, "oneTWO");
-			QUnit.start();
+			assert.equal(patches.length, 1);
+			assert.equal(patches[0].value, "oneTWO");
+			done();
 		}
 	});
 
@@ -152,11 +147,10 @@ QUnit.test("Ignores consecutive TextNodes", function(){
 
 	ta.appendChild(document.createTextNode("three"));
 	ta.appendChild(document.createTextNode("four"));
-
-	QUnit.stop();
 });
 
-QUnit.test("Callback is not called if there are no changes", function(){
+QUnit.test("Callback is not called if there are no changes", function(assert){
+	var done = assert.async();
 	var document = this.document;
 	var ta = this.testArea;
 
@@ -170,22 +164,21 @@ QUnit.test("Callback is not called if there are no changes", function(){
 	patch.flush();
 
 	setTimeout(function(){
-		QUnit.equal(called, false, "The patch callback was not called");
-		QUnit.start();
+		assert.equal(called, false, "The patch callback was not called");
+		done();
 	}, 50);
-
-	QUnit.stop();
 });
 
-QUnit.test("'ref' property is correct using replaceChild", function(){
+QUnit.test("'ref' property is correct using replaceChild", function(assert){
+	var done = assert.async();
 	var document = this.document;
 	var ta = this.testArea;
 
 	patch(document, function(changes){
 		var instr = changes[3];
-		QUnit.equal(instr.ref, 1, "TextNodes ignored");
+		assert.equal(instr.ref, 1, "TextNodes ignored");
 
-		QUnit.start();
+		done();
 	});
 
 	var div = document.createElement("div");
@@ -196,20 +189,17 @@ QUnit.test("'ref' property is correct using replaceChild", function(){
 	ta.appendChild(div);
 
 	ta.replaceChild(sec, div);
-
-	QUnit.stop();
 });
 
-
-QUnit.test("'ref' property is correct using insertBefore", function(){
+QUnit.test("'ref' property is correct using insertBefore", function(assert){
+	var done = assert.async();
 	var document = this.document;
 	var ta = this.testArea;
 
 	patch(document, function(changes){
 		var instr = changes[3];
-		QUnit.equal(instr.ref, 1, "TextNodes ignored");
-
-		QUnit.start();
+		assert.equal(instr.ref, 1, "TextNodes ignored");
+		done();
 	});
 
 	var div = document.createElement("div");
@@ -220,6 +210,4 @@ QUnit.test("'ref' property is correct using insertBefore", function(){
 	ta.appendChild(div);
 
 	ta.insertBefore(sec, div);
-
-	QUnit.stop();
 });
