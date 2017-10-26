@@ -3,7 +3,8 @@ var inDocument = require("./util/in_document");
 
 var nodeProps = [
 	{ prop:"nodeValue", type: "text"},
-	{ prop: "value", type: "prop"}
+	{ prop: "value", type: "prop"},
+	{ prop: "textContent", type: "prop" }
 ];
 
 var elementProps = [
