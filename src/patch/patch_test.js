@@ -71,6 +71,20 @@ QUnit.test("setting className is serialized as a node patch", function(assert){
 	this.testArea.appendChild(span);
 });
 
+QUnit.test("setting textContent results in a patch", function(assert){
+	var done = assert.async();
+	var document = this.document;
+	var span = document.createElement("span");
+	this.testArea.appendChild(span);
+
+	patch(document, function(patches){
+		assert.equal(patches[0].type, "prop", "got textContent patch");
+		done();
+	});
+
+	span.textContent = "hello world";
+});
+
 QUnit.test("Can patch multiple docs at once", function(assert){
 	var done = assert.async();
 	var doc1 = new JSDOM().window.document;
