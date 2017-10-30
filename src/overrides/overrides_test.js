@@ -2,8 +2,8 @@ var QUnit = require("steal-qunit");
 var simpleDOM = require("can-simple-dom");
 var Map = require("can-map");
 var Node = require("can-simple-dom/simple-dom/document/node")["default"];
-var DOCUMENT = require("can-util/dom/document/document");
-var MO = require("can-util/dom/mutation-observer/mutation-observer");
+var DOCUMENT = require("can-globals/document/document");
+var globals = require("can-globals");
 var stache = require("can-stache");
 var nodeRoute = require("node-route");
 var markAsInDocument = require("./util/mark_in_document");
@@ -18,9 +18,8 @@ QUnit.module("dom-patch overrides", {
 		window.postMessage = function(){};
 		this.doc = new simpleDOM.Document();
 		this.oldDoc = DOCUMENT();
-		this.mo = MO();
 		DOCUMENT(this.doc);
-		MO(null);
+		globals.setKeyValue('MutationObserver', null);
 
 		this.patch(this.doc, function(){});
 		markAsInDocument(this.doc.documentElement);
@@ -29,7 +28,7 @@ QUnit.module("dom-patch overrides", {
 		this.patch.deregister();
 		window.postMessage = this.oldPostMessage;
 		DOCUMENT(this.oldDoc);
-		MO(this.mo);
+		globals.deleteKeyValue('MutationObserver');
 
 	}
 });
