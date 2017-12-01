@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/canjs/dom-patch#readme",
   "dependencies": {
-    "can-globals": "^0.2.3",
+    "can-globals": "^0.3.0",
     "node-route": "^1.2.0"
   },
   "devDependencies": {
