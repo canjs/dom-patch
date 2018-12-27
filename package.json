@@ -43,7 +43,7 @@
     "can-simple-dom": "^1.0.10",
     "can-stache": "^3.0.21",
     "can-util": "^3.3.5",
-    "can-vdom": "^3.0.3",
+    "can-vdom": "^4.4.1",
     "jsdom": "^11.3.0",
     "qunitjs": "^2.4.1",
     "steal": "^1.0.0",
