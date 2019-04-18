@@ -47,7 +47,7 @@
     "jsdom": "^11.3.0",
     "qunitjs": "^2.4.1",
     "steal": "^1.0.0",
-    "steal-qunit": "^1.0.0",
+    "steal-qunit": "^2.0.0",
     "steal-tools": "^1.0.0",
     "testee": "^0.3.0"
   }
