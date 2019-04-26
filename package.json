@@ -39,7 +39,7 @@
     "node-route": "^1.2.0"
   },
   "devDependencies": {
-    "can-map": "^3.0.6",
+    "can-map": "^4.0.0",
     "can-simple-dom": "^1.0.10",
     "can-stache": "^3.0.21",
     "can-util": "^3.3.5",
